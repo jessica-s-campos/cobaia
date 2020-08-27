@@ -21,38 +21,73 @@
             <div class="dados-entrada">
                 
 
-                <div style="display: flex; flex-direction: column; justify-content: center;">
-                    <div style="display: flex; flex-direction: column; justify-content: space-around;">
-                        <button class="btn btn-primary btn-novo" id="btn-novo" onclick="NovoCalculo()"><i class="fa fa-file-o" style="margin-right: 0.5rem;" aria-hidden="true"></i>Novo cálculo</button>
+                <div class="col-md-6" style="display: flex; flex-direction: column; justify-content: center;">
+                   
+                    <div class="row">
+                        <div class="col-md-4" style="display: flex; flex-direction: column; justify-content: space-around;">
+                            <button class="btn btn-primary btn-novo" id="btn-novo" onclick="NovoCalculo()"><i class="fa fa-file-o" style="margin-right: 0.5rem;" aria-hidden="true"></i>Novo cálculo</button>
+                        </div>
                     </div>
 
-                    <div>                      
-                        <label for="lucro">Lucro</label> 
-                        
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">
-                                    <input type="checkbox" aria-label="Checkbox que acompanha o campo lucro e determina se ele é fixo ou não" id="check-lucro">
-                                </div>                                
-                            </div>
-                            <input class="form-control" id="lucro" type="number" value="0"/> 
-                        </div>                                                              
-                        
+                    <div class="row">
+                        <div class="col-md-4">                      
+                            <label for="lucro">Lucro</label> 
+                            
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <input type="checkbox" aria-label="Checkbox que acompanha o campo lucro e determina se ele é fixo ou não" id="check-lucro">
+                                    </div>                                
+                                </div>
+                                <input class="form-control" id="lucro" type="number" value="0"/> 
+                            </div>                                                              
+                            
+                        </div>
+    
+                        <div class="col-md-4">                      
+                            <label for="tx-classico">Clássico</label> 
+                            
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <input type="checkbox" aria-label="Checkbox que acompanha o campo taxa clássico e determina se ele é fixo ou não" id="check-tx-classico">
+                                    </div>                                
+                                </div>
+                                <input class="form-control" id="tx-classico" type="number" value="0"/> 
+                            </div>                                                              
+                            
+                        </div>
+    
+                        <div class="col-md-4">                      
+                            <label for="tx-premium">Premium</label> 
+                            
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <input type="checkbox" aria-label="Checkbox que acompanha o campo taxa premium e determina se ele é fixo ou não" id="check-tx-premium">
+                                    </div>                                
+                                </div>
+                                <input class="form-control" id="tx-premium" type="number" value="0"/> 
+                            </div>                                                              
+                            
+                        </div>
                     </div>
                     
-                    <div>
-                        <label for="custo">Custo</label>
-                        <input class="form-control" id="custo" type="number" value=""/>
-                    </div>
-                    
-                    
-                    <div>
-                        <label for="frete">Frete</label> 
-                        <input class="form-control" id="frete" type="number" value=""/>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="custo">Custo *</label>
+                            <input class="form-control" id="custo" type="number" value=""/>
+                        </div>
+                        
+                        
+                        <div class="col-md-4">
+                            <label for="frete">Frete</label> 
+                            <input class="form-control" id="frete" type="number" value=""/>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="venda-nf card" style="width: 18rem;">
+                <div class="venda-nf card col-md-3" style="margin-left: 1rem;">
                     <div class="card-body">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="nf">
@@ -72,7 +107,7 @@
                     </div>
                 </div>
 
-                <div class="opcoes">
+                <div class="opcoes col-md-3" style="margin-left: 1rem;">
                     <h3>Opções de visualização</h3>                    
 
                     <div class="form-check">

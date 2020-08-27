@@ -1,5 +1,5 @@
-var tx_premium = 16/100;
-var tx_classico = 11/100;
+var tx_premium = 0; //16/100;
+var tx_classico = 0; //11/100;
 
 var tx_premium_nf = 0;
 var tx_classico_nf = 0;
@@ -18,6 +18,8 @@ let despesas_classico = 0;
 
 var lucro = 0;
 var lucro_fixado = false;
+var tx_premium_fixado = false;
+var tx_classico_fixado = false;
 
 var dados = new Array();
 var ultimoCodigo = 0;
@@ -28,7 +30,7 @@ $(document).ready(()=>{
     document.getElementById('opcao-premium').checked = true;
     document.getElementById('opcao-classico').checked = true;
     
-    CarregarLucro();
+    CarregarVariaveisSessao();
     
     VerificaVendaComNota();
 
@@ -45,18 +47,40 @@ $(document).ready(()=>{
     document.getElementById('check-lucro').addEventListener('change', () => VerificaLucro())
     document.getElementById('lucro').addEventListener('change', () => VerificaLucro())
 
+    document.getElementById('check-tx-premium').addEventListener('change', () => VerificaTxPremium())
+    document.getElementById('check-tx-classico').addEventListener('change', () => VerificaTxClassico())
+
 });
 
-function CarregarLucro(){
-    var lucro_sessao = sessionStorage.getItem('lucro');
-    lucro = lucro_sessao === null ? convertNumber($('#lucro').val()) : lucro_sessao;    
-    $('#lucro').val(lucro);
-    lucro_fixado = lucro_sessao !== null;
+function CarregarVariaveisSessao(){
+
+    $('#lucro').val(ObterLucro());
+    $('#tx-premium').val(ObterTxPremium());
+    $('#tx-classico').val(ObterTxClassico());
+
+    //lucro
+    lucro_fixado = sessionStorage.getItem('lucro') !== null;
     $('#check-lucro')[0].checked = lucro_fixado;  
 
     if(!lucro_fixado)
         $('#lucro').focus();
+
+    //tx-premium
+    tx_premium_fixado = sessionStorage.getItem('tx-premium') !== null;
+    $('#check-tx-premium')[0].checked = tx_premium_fixado;  
+
+    if(!tx_premium_fixado)
+        $('#tx-premium').focus();
+
+    //tx-classico
+    tx_classico_fixado = sessionStorage.getItem('tx-classico') !== null;
+    $('#check-tx-classico')[0].checked = tx_classico_fixado;  
+
+    if(!tx_classico_fixado)
+        $('#tx-classico').focus();
 }
+
+
 
 function ObterLucro(){    
     var lucro_sessao = sessionStorage.getItem('lucro');
@@ -66,12 +90,46 @@ function ObterLucro(){
 
 function VerificaLucro(){
     lucro_fixado = $('#check-lucro')[0].checked;
-    
-    if(lucro_fixado){
-        var percentual = convertNumber($('#lucro').val());       
+    var percentual = convertNumber($('#lucro').val());     
+
+    if(lucro_fixado && percentual > 0){         
         sessionStorage.setItem('lucro', percentual);       
     }else{
         sessionStorage.removeItem('lucro');
+    }
+}
+
+function ObterTxPremium(){    
+    var tx_premium_sessao = sessionStorage.getItem('tx-premium');
+    tx_premium_ = tx_premium_sessao === null ? convertNumber($('#tx-premium').val()) : tx_premium_sessao;     
+    return tx_premium_;
+}
+
+function VerificaTxPremium(){
+    tx_premium_fixado = $('#check-tx-premium')[0].checked;
+    var percentual = convertNumber($('#tx-premium').val());   
+
+    if(tx_premium_fixado && percentual > 0 ){        
+        sessionStorage.setItem('tx-premium', percentual);       
+    }else{
+        sessionStorage.removeItem('tx-premium');
+    }
+}
+
+function ObterTxClassico(){    
+    var tx_classico_sessao = sessionStorage.getItem('tx-classico');
+    tx_classico = tx_classico_sessao === null ? convertNumber($('#tx-classico').val()) : tx_classico_sessao;     
+    return tx_classico;
+}
+
+function VerificaTxClassico(){
+    tx_classico_fixado = $('#check-tx-classico')[0].checked;
+    var percentual = convertNumber($('#tx-classico').val());
+
+    if(tx_classico_fixado && percentual > 0){               
+        sessionStorage.setItem('tx-classico', percentual);       
+    }else{
+        sessionStorage.removeItem('tx-classico');
     }
 }
 
@@ -153,8 +211,7 @@ var cobaia;
 
 
 function CalculaAnuncio()
-{    
-
+{        
     let op_premium;
     let op_classico;
     let op_historico;    
@@ -225,11 +282,25 @@ function CalculaAnuncio()
                         
     }
     
-
+    
+    custo = convertNumber($('#custo').val());
+    tx_premium = ObterTxPremium()/100;
+    tx_classico = ObterTxClassico()/100;
     nf = document.getElementById('nf').checked;
     imposto_entrada = convertNumber($('#imposto-entrada').val());
     tx_saida = convertNumber($('#percentual-imposto-saida').val())/100;  
-    
+
+    if(custo == 0){
+        Swal.fire({
+            title: 'Erro',
+            text: 'Informe o custo do anúncio!',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+        });
+        
+        return;
+    }
+
     if(nf && (imposto_entrada === 0 || tx_saida === 0)){
         
         var text = imposto_entrada === 0 && tx_saida === 0 ? 'Informe o imposto de entrada e saída' : tx_saida === 0 ? 'Informe o percentual do imposto de saída' : imposto_entrada === 0 ? 'Informe o imposto de entrada!' : '';
@@ -252,8 +323,8 @@ function CalculaAnuncio()
     op_premium = document.getElementById('opcao-premium').checked;
     op_classico = document.getElementById('opcao-classico').checked;
     op_historico = document.getElementById('opcao-exibir-historico').checked;
-    custo = convertNumber($('#custo').val());
-    percentual_lucro = ObterLucro()/100;    
+    
+    percentual_lucro = ObterLucro()/100;      
     frete = convertNumber($('#frete').val());
 
     tx_premium_nf = tx_premium + tx_saida;
@@ -280,21 +351,35 @@ function CalculaAnuncio()
     if(nf){
         
         item.premium.valor = valor / ((1 - tx_premium_nf));                
-        item.premium.despesas= (valor * tx_premium_nf);
+        item.premium.despesas= (item.premium.valor * tx_premium_nf);
        
         item.classico.valor = valor / ((1 - tx_classico_nf));        
-        item.classico.despesas = (valor * tx_classico_nf);             
+        item.classico.despesas = (
+            item.classico.valor * tx_classico_nf);             
     
     }
     else{
 
         item.premium.valor  = (valor/ (1 - tx_premium));
-        item.premium.despesas  = (valor * tx_premium);
+        item.premium.despesas  = (item.premium.valor * tx_premium);
 
         item.classico.valor = (valor/ (1 - tx_classico));
-        item.classico.despesas = (valor * tx_classico);
+        item.classico.despesas = (item.classico.valor  * tx_classico);
 
     }   
+
+    console.log('taxa_fixa ', taxa_fixa);
+    console.log('imposto_entrada ', imposto_entrada);
+    console.log('frete ', frete);
+    console.log('valor ', valor);
+    console.log('tx_premium ', tx_premium);
+    console.log('tx_classico ', tx_classico);
+    console.log('custo ', custo);
+    console.log('percentual_lucro ', percentual_lucro);
+    console.log('percentual_lucro ', percentual_lucro);
+    console.log('percentual_lucro ', percentual_lucro);
+    console.log('(1 - tx_premium) ', (1 - tx_premium));
+    console.log('(1 - tx_classico) ', (1 - tx_classico));
 
     item.imposto_entrada = imposto_entrada;
     item.tx_saida = tx_saida;

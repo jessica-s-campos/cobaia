@@ -7,17 +7,18 @@ var Node = function (id, text, hRef, icon, children,parenthRef) {
     this.parenthRef = parenthRef;
     this.html = "";
     
+   
 
     if (this.hRef){
-      this.html = `<li draggable="true" ondragstart="drag(event)">      
+      this.html = `<div draggable="true" ondragstart="drag(event)">      
           <a data-toggle=\"collapse\" href=\"#${this.hRef}\">           
           <span>${this.text}</span>
           </a>
-          <div id=\"${this.hRef}\" class=\"collapse\"><ul ondragover="allowDrop(event)" ondrop="drop(event)" class=\"${this.hRef}\"></ul></div></li>`; 
+          <div id=\"${this.hRef}\" class=\"collapse\"><div class=\"${this.hRef}\"></div></div></div>`; 
   }else{
-      this.html = `<li draggable="true" ondragstart="drag(event)">
+      this.html = `<div draggable="true" ondragstart="drag(event)">
       <span>${this.text}</span>
-      </li>`;
+      </div>`;
   }
     
   }
@@ -57,6 +58,7 @@ function drag(ev) {
 
 function drop(ev) {
   ev.preventDefault();
+  console.log('drop ',ev);
   var data = ev.dataTransfer.getData("text");
   ev.target.appendChild(document.getElementById(data));
 }
@@ -72,8 +74,10 @@ function traverse(node) {
 var html;
 
 var tree = (function () {
-   
+    //// ondrop="drop(event)" ondragover="allowDrop(event)"
     var htmlObject = document.createElement('div');
+    htmlObject.addEventListener("ondragover",allowDrop);
+    htmlObject.addEventListener("ondrop",drop);
   
     return {
         
@@ -84,7 +88,7 @@ var tree = (function () {
           }
           else {                     
             html = $(no.html)[0].outerHTML;    
-            htmlObject.querySelector("ul[class='"+no.parenthRef+"']").innerHTML += html;          
+            htmlObject.querySelector("div[class='"+no.parenthRef+"']").innerHTML += html;          
           }
         },
         
@@ -98,7 +102,6 @@ var tree = (function () {
 
 function montarTree(dados) {
     
-    var ul = document.createElement('ul');
  
     traverse(dados);
     tree.showAppend();

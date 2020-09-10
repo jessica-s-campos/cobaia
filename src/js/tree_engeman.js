@@ -9,16 +9,16 @@ var Node = function (id, text, hRef, icon, children,parenthRef) {
     this.html = "";
     
     if (this.hRef){
-        this.html = `<li>
+        this.html = `<div>
         <a data-toggle=\"collapse\" href=\"#${this.hRef}\"> 
             <i class=\"${this.icon}\"></i>
             <span>${this.text}</span>
             </a>
-            <div id=\"${this.hRef}\" class=\"collapse\"><ul class=\"${this.hRef}\"></ul></div></li>`; 
+            <div id=\"${this.hRef}\" class=\"collapse\"><div class=\"${this.hRef}\"></div></div></div>`; 
     }else{
-        this.html = `<li>
+        this.html = `<div>
         <span>${this.text}</span>
-        </li>`;
+        </div>`;
     }
     
   }
@@ -72,7 +72,7 @@ var tree = (function () {
           }
           else {                     
             html = $(no.html)[0].outerHTML;    
-            htmlObject.querySelector("ul[class='"+no.parenthRef+"']").innerHTML += html;          
+            htmlObject.querySelector("div[class='"+no.parenthRef+"']").innerHTML += html;          
           }
         },
         
@@ -86,7 +86,7 @@ var tree = (function () {
 
 function montarTree(dados) {
     
-    var ul = document.createElement('ul');
+    var ul = document.createElement('div');
  
     traverse(dados);
     tree.showAppend();

@@ -8,12 +8,124 @@
     <script src="https://kit.fontawesome.com/c818a94a41.js" crossorigin="anonymous"></script>
 
 </head>
+<style>
+    body{
+        display: flex;
+    }
+
+    .teste{
+        width: 50vw;
+        padding: 2rem;
+    }
+
+    .collapsible {
+        /*background-color: aliceblue;*/
+        color: purple;
+        cursor: pointer;
+        /*padding: 18px;*/
+        width: fit-content;
+        height: fit-content;
+        /*border: 1px solid lavender;*/
+        text-align: left;
+        /*outline: none;*/
+        font-size: 1rem;
+    }
+
+    .active, .collapsible:hover {
+        background-color: aliceblue;
+    }
+
+    .content {
+        padding: 0 18px;
+        max-height: 0;
+        overflow: hidden;
+        width: fit-content;
+        height: fit-content;
+        transition: max-height 0.2s ease-out;
+        /*background-color:white;*/
+    }
+
+    a{
+        color: black;
+    }
+
+    .draggable{        
+        margin: 10px;
+    }
+
+    a{
+        font-size: 1rem;
+    }
+
+    a::before{
+        content: '\00a0 >';
+    }
+
+    .area{
+        margin: 20px;
+        border: 1px solid blueviolet;       
+        height: 80vh;
+    }
+</style>
 <body class="container">
                
-    <div class="tree-engeman"></div>
+    <!-- <div class="tree-engeman"></div> -->
 
+   <div class="teste">
+    <span>Arrastavel</span>
+    <div id="area1" class="area"  ondrop="drop(event)" ondragover="allowDrop(event)">    
+        <div id="opcao1" class="draggable" draggable="true" ondragstart="drag(event)"><a>Opcao 1</a></div>
+        <div id="opcao2" class="draggable" draggable="true" ondragstart="drag(event)"><a>Opcao 2</a></div>
+        <div id="opcao3" class="draggable" draggable="true" ondragstart="drag(event)"><a>Opcao 3</a></div>
+        <div id="opcao4" class="draggable" draggable="true" ondragstart="drag(event)"><a>Opcao 4</a></div>
+    </div>
+   </div>
+   
+    <div class="teste">
+        <span>Arrastavel e Colapsável</span>
+        <div id="area2" class="area"  ondrop="drop(event)" ondragover="allowDrop(event)">               
+            <div id="opcao5" class="draggable" draggable="true" ondragstart="drag(event)">
+                <div class="collapsible"><a>5</a></div>
+                <div class="content">Conteudo 5</div>
+            </div>
+
+            <div id="opcao6" class="draggable" draggable="true" ondragstart="drag(event)">
+                <div class="collapsible"><a>6</a></div>
+                <div class="content">Conteudo 6</div>
+            </div>
+                        
+            <div id="opcao7"  class="draggable" draggable="true" ondragstart="drag(event)">
+                <div class="collapsible"><a>7</a></div>
+                <div class="content">Conteudo 7</div>
+            </div>
+                  
+            <div id="opcao8"  class="draggable" draggable="true" ondragstart="drag(event)">
+                <div class="collapsible"><a>8</a></div>
+                <div class="content">Conteudo 8</div>
+            </div>
+            
+            
+        </div>
+    </div>
    </body>
 </html>
+
+<script>
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var content = this.nextElementSibling;
+        if (content.style.maxHeight){
+        content.style.maxHeight = null;
+        } else {
+        content.style.maxHeight = content.scrollHeight + "px";
+        } 
+    });
+    }
+</script>
 
 <script src="../js/jquery-3.5.1/jquery-3.5.1.min.js"></script>
 <script src="../js/bootstrap-4.4.1/bootstrap.min.js"></script>
